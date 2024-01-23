@@ -11,7 +11,8 @@ fun Task.toEntity(): TaskEntity {
         workTime = workTime.toSecondOfDay().toLong(),
         dueDate = dueDate.toEpochDay(),
         totalSessions = totalSessions,
-        currentSessions = currentSessions
+        currentSessions = currentSessions,
+        id = id
     )
 }
 
@@ -21,6 +22,7 @@ fun TaskEntity.toModel(): Task {
         workTime = LocalTime.ofSecondOfDay(workTime),
         dueDate = LocalDate.ofEpochDay(dueDate),
         totalSessions = totalSessions,
-        currentSessions = currentSessions
+        currentSessions = currentSessions,
+        id = id
     )
 }

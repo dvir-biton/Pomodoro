@@ -8,5 +8,7 @@ data class Task(
     val workTime: LocalTime,
     val dueDate: LocalDate,
     val totalSessions: Int,
-    val currentSessions: Int
+    val currentSessions: Int,
+
+    val id: Int? = null
 )
