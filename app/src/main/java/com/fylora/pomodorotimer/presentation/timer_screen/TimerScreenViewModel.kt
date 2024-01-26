@@ -49,7 +49,6 @@ class TimerScreenViewModel @Inject constructor(
                     try {
                         repository.upsertTask(event.task)
                     } catch (e: InvalidTaskException) {
-
                         _uiEvent.send(
                             UiEvent.ShowSnackBar(
                                 e.message ?: "Could not create task"
