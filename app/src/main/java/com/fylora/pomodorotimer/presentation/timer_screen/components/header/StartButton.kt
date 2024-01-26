@@ -1,4 +1,4 @@
-package com.fylora.pomodorotimer.presentation.timer_screen.components
+package com.fylora.pomodorotimer.presentation.timer_screen.components.header
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
