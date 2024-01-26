@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.fylora.pomodorotimer.presentation.timer_screen.components.CountdownTimer
+import com.fylora.pomodorotimer.presentation.timer_screen.components.header.CountdownTimer
 import com.fylora.pomodorotimer.ui.theme.PomodoroTimerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
