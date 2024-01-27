@@ -94,7 +94,9 @@ fun TimerScreen(
                             )
                         },
                         onSelect = {
-
+                            tasksViewModel.onEvent(
+                                TasksEvent.OnTaskSelect(task)
+                            )
                         }
                     )
                 }

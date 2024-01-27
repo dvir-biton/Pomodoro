@@ -114,6 +114,25 @@ class TasksViewModel @Inject constructor(
                     repository.upsertTask(newTask)
                 }
             }
+            is TasksEvent.OnTaskSelect -> {
+                viewModelScope.launch {
+                    state.value.selectedTask?.let { oldSelectedTask ->
+                        repository.upsertTask(
+                            oldSelectedTask.copy(
+                                isSelected = false
+                            )
+                        )
+                    }
+                    repository.upsertTask(
+                        event.task.copy(
+                            isSelected = true
+                        )
+                    )
+                }
+                _state.value = state.value.copy(
+                    selectedTask = event.task
+                )
+            }
         }
     }
 
