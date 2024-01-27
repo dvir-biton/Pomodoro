@@ -69,7 +69,7 @@ class TimerScreenViewModel @Inject constructor(
     }
 
     private fun toggleTimer() {
-        if(_state.value.isTimerRunning) {
+        if(_state.value.isTimerRunning || timer != null) {
             stopTimer()
             return
         }
@@ -90,7 +90,7 @@ class TimerScreenViewModel @Inject constructor(
                         seconds = newSeconds % 60
                     )
                 }
-            }, 0, 1000)
+            }, 1000, 1000)
         }
         state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
     }
@@ -133,6 +133,7 @@ class TimerScreenViewModel @Inject constructor(
 
     private fun stopTimer() {
         timer?.cancel()
+        timer = null
         _state.value = state.value.copy(
             isTimerRunning = false
         )
@@ -140,6 +141,6 @@ class TimerScreenViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        timer?.cancel()
+        stopTimer()
     }
 }
