@@ -9,6 +9,8 @@ data class Task(
     val dueDate: LocalDate,
     val totalSessions: Double,
     val currentSessions: Double = 0.0,
+    val isCompleted: Boolean = false,
+    val isSelected: Boolean = false,
 
     val id: Int? = null
 )

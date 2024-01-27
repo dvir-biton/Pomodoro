@@ -11,6 +11,8 @@ data class TaskEntity(
     val dueDate: Long,
     val totalSessions: Double,
     val currentSessions: Double,
+    val isCompleted: Boolean,
+    val isSelected: Boolean,
 
     @PrimaryKey
     val id: Int? = null

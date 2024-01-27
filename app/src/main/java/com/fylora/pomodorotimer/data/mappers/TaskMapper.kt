@@ -12,6 +12,8 @@ fun Task.toEntity(): TaskEntity {
         dueDate = dueDate.toEpochDay(),
         totalSessions = totalSessions,
         currentSessions = currentSessions,
+        isCompleted = isCompleted,
+        isSelected = isSelected,
         id = id
     )
 }
@@ -23,6 +25,8 @@ fun TaskEntity.toModel(): Task {
         dueDate = LocalDate.ofEpochDay(dueDate),
         totalSessions = totalSessions,
         currentSessions = currentSessions,
+        isCompleted = isCompleted,
+        isSelected = isSelected,
         id = id
     )
 }
