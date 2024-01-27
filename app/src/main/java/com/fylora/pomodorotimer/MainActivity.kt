@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.fylora.pomodorotimer.presentation.timer_screen.components.header.CountdownTimer
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fylora.pomodorotimer.presentation.timer_screen.TimerEvent
+import com.fylora.pomodorotimer.presentation.timer_screen.TimerScreenViewModel
+import com.fylora.pomodorotimer.presentation.timer_screen.components.header.Header
 import com.fylora.pomodorotimer.ui.theme.PomodoroTimerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +26,21 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
-                    CountdownTimer(minutes = 12, seconds = 32)
+                    val viewModel: TimerScreenViewModel = hiltViewModel()
+                    Header(
+                        isTimerRunning = viewModel.state.value.isTimerRunning,
+                        onStartStop = {
+                            viewModel.onEvent(TimerEvent.StartStopTimer)
+                        },
+                        onStateChange = {
+                            viewModel.onEvent(
+                                TimerEvent.ChangeTimerState(it)
+                            )
+                        },
+                        state = viewModel.state.value.timerState,
+                        minutes = viewModel.state.value.minutes,
+                        seconds = viewModel.state.value.seconds
+                    )
                 }
             }
         }

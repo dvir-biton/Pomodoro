@@ -39,8 +39,10 @@ class TimerScreenViewModel @Inject constructor(
 
     fun onEvent(event: TimerEvent) {
         when(event) {
-            is TimerEvent.ChangeTimerState ->
+            is TimerEvent.ChangeTimerState -> {
                 _state.value = state.value.copy(timerState = event.newState)
+                resetTimer()
+            }
             TimerEvent.StartStopTimer ->
                 toggleTimer()
             TimerEvent.TriggerNewTaskDialog ->
@@ -67,9 +69,8 @@ class TimerScreenViewModel @Inject constructor(
     }
 
     private fun toggleTimer() {
-        if(_state.value.isTimerRunning){
-            timer?.cancel()
-            _state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
+        if(_state.value.isTimerRunning) {
+            stopTimer()
             return
         }
 
@@ -78,8 +79,10 @@ class TimerScreenViewModel @Inject constructor(
                 override fun run() {
                     val totalSeconds = _state.value.minutes * 60 + _state.value.seconds
 
-                    if(totalSeconds <= 0)
+                    if(totalSeconds <= 0) {
                         onTimerFinished()
+                        return
+                    }
 
                     val newSeconds = totalSeconds - 1
                     _state.value = state.value.copy(
@@ -89,14 +92,11 @@ class TimerScreenViewModel @Inject constructor(
                 }
             }, 0, 1000)
         }
-        _state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
+        state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
     }
 
     private fun onTimerFinished() {
-        timer?.cancel()
-        _state.value = state.value.copy(
-            isTimerRunning = false
-        )
+        stopTimer()
 
         if(state.value.timerState is TimerState.Pomodoro) {
             val newLongBreakIndicator = (state.value.longBreakIndicator + 1) % Globals.longBreakInterval
@@ -108,7 +108,9 @@ class TimerScreenViewModel @Inject constructor(
             )
         } else {
             _state.value = state.value.copy(
-                timerState = TimerState.Pomodoro
+                timerState = TimerState.Pomodoro,
+                longBreakIndicator = if(state.value.timerState is TimerState.LongBreak) 0
+                else state.value.longBreakIndicator
             )
         }
 
@@ -116,6 +118,8 @@ class TimerScreenViewModel @Inject constructor(
     }
 
     private fun resetTimer() {
+        stopTimer()
+
         val newMinutes = when(state.value.timerState) {
             TimerState.LongBreak -> Globals.longBreakLength
             TimerState.Pomodoro -> Globals.sessionLength
@@ -124,6 +128,13 @@ class TimerScreenViewModel @Inject constructor(
         _state.value = state.value.copy(
             minutes = newMinutes,
             seconds = 0
+        )
+    }
+
+    private fun stopTimer() {
+        timer?.cancel()
+        _state.value = state.value.copy(
+            isTimerRunning = false
         )
     }
 

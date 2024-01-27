@@ -38,7 +38,7 @@ fun CountdownTimer(
             letterSpacing = 4.8.sp,
         )
         Text(
-            text = seconds.toString(),
+            text = String.format("%02d", seconds),
             fontSize = 96.sp,
             fontFamily = fontFamily,
             fontWeight = FontWeight.ExtraLight,
