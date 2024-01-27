@@ -3,13 +3,17 @@ package com.fylora.pomodorotimer.presentation.timer_screen
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fylora.pomodorotimer.core.Globals
 import com.fylora.pomodorotimer.domain.model.InvalidTaskException
 import com.fylora.pomodorotimer.domain.repository.TaskRepository
+import com.fylora.pomodorotimer.domain.util.TimerState
 import com.fylora.pomodorotimer.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +26,8 @@ class TimerScreenViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private var timer: Timer? = null
 
     init {
         viewModelScope.launch {
@@ -36,7 +42,7 @@ class TimerScreenViewModel @Inject constructor(
             is TimerEvent.ChangeTimerState ->
                 _state.value = state.value.copy(timerState = event.newState)
             TimerEvent.StartStopTimer ->
-                _state.value = state.value.copy(isTimerRunning = !state.value.isTimerRunning)
+                toggleTimer()
             TimerEvent.TriggerNewTaskDialog ->
                 state.value = state.value.copy(isAddTaskPopUpEnabled = !state.value.isAddTaskPopUpEnabled)
             is TimerEvent.DeleteTask -> {
@@ -58,5 +64,71 @@ class TimerScreenViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun toggleTimer() {
+        if(_state.value.isTimerRunning){
+            timer?.cancel()
+            _state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
+            return
+        }
+
+        timer = Timer().apply {
+            schedule(object : TimerTask() {
+                override fun run() {
+                    val totalSeconds = _state.value.minutes * 60 + _state.value.seconds
+
+                    if(totalSeconds <= 0)
+                        onTimerFinished()
+
+                    val newSeconds = totalSeconds - 1
+                    _state.value = state.value.copy(
+                        minutes = newSeconds / 60,
+                        seconds = newSeconds % 60
+                    )
+                }
+            }, 0, 1000)
+        }
+        _state.value = _state.value.copy(isTimerRunning = !_state.value.isTimerRunning)
+    }
+
+    private fun onTimerFinished() {
+        timer?.cancel()
+        _state.value = state.value.copy(
+            isTimerRunning = false
+        )
+
+        if(state.value.timerState is TimerState.Pomodoro) {
+            val newLongBreakIndicator = (state.value.longBreakIndicator + 1) % Globals.longBreakInterval
+            _state.value = state.value.copy(
+                longBreakIndicator = newLongBreakIndicator,
+                timerState = if(newLongBreakIndicator == 0)
+                    TimerState.LongBreak
+                else TimerState.ShortBreak
+            )
+        } else {
+            _state.value = state.value.copy(
+                timerState = TimerState.Pomodoro
+            )
+        }
+
+        resetTimer()
+    }
+
+    private fun resetTimer() {
+        val newMinutes = when(state.value.timerState) {
+            TimerState.LongBreak -> Globals.longBreakLength
+            TimerState.Pomodoro -> Globals.sessionLength
+            TimerState.ShortBreak -> Globals.shortBreakLength
+        }
+        _state.value = state.value.copy(
+            minutes = newMinutes,
+            seconds = 0
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timer?.cancel()
     }
 }
