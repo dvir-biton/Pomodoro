@@ -70,10 +70,11 @@ class TasksViewModel @Inject constructor(
                     }
                 }
             }
-            is TasksEvent.DueDateValueChanged ->
+            is TasksEvent.DueDateValueChanged -> {
                 _state.value = state.value.copy(
                     dueDateValue = event.newDate
                 )
+            }
             is TasksEvent.HoursTextFieldValueChanged -> {
                 val isValid = isValidTimeFormat(event.value, "hours")
                 if(!isValid)
@@ -92,18 +93,27 @@ class TasksViewModel @Inject constructor(
                     minutesTextFieldValue = event.value
                 )
             }
-            TasksEvent.OpenCloseAddTaskDialog ->
+            TasksEvent.OpenCloseAddTaskDialog -> {
                 _state.value = state.value.copy(
 
                 )
-            TasksEvent.OpenCloseDatePicker ->
+            }
+            TasksEvent.OpenCloseDatePicker -> {
                 _state.value = state.value.copy(
                     isDatePickerOpen = !state.value.isDatePickerOpen
                 )
-            is TasksEvent.TitleTextFieldValueChanged ->
+            }
+            is TasksEvent.TitleTextFieldValueChanged -> {
                 _state.value = state.value.copy(
                     titleTextFieldValue = event.value
                 )
+            }
+            is TasksEvent.ToggleCheckTask -> {
+                val newTask = event.task.copy(isCompleted = !event.task.isCompleted)
+                viewModelScope.launch {
+                    repository.upsertTask(newTask)
+                }
+            }
         }
     }
 

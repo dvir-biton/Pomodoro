@@ -2,6 +2,7 @@ package com.fylora.pomodorotimer.presentation.timer_screen.timer.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TaskItem(
     task: Task,
-    onCheckChange: (Boolean) -> Unit
+    onCheckChange: () -> Unit,
+    onSelect: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -55,7 +57,8 @@ fun TaskItem(
                     MaterialTheme.colorScheme.primary
                 else Color.Transparent,
                 shape = RoundedCornerShape(size = 8.dp)
-            ),
+            )
+            .clickable { onSelect() },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -80,7 +83,7 @@ fun TaskItem(
                 Checkbox(
                     checked = task.isCompleted,
                     onCheckedChange = {
-                        onCheckChange(it)
+                        onCheckChange()
                     },
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colorScheme.primary,
@@ -165,6 +168,7 @@ fun TaskItemPreview() {
             dueDate = LocalDate.now().plusDays(1),
             totalSessions = 4.0,
         ),
-        onCheckChange = {}
+        onCheckChange = {},
+        onSelect = {},
     )
 }
