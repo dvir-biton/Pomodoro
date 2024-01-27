@@ -22,7 +22,7 @@ import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TasksEvent
 import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TasksViewModel
 import com.fylora.pomodorotimer.presentation.timer_screen.timer.TimerEvent
 import com.fylora.pomodorotimer.presentation.timer_screen.timer.TimerScreenViewModel
-import com.fylora.pomodorotimer.presentation.timer_screen.timer.components.TaskItem
+import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TaskItem
 import com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header.Header
 import com.fylora.pomodorotimer.presentation.util.UiEvent
 
@@ -96,6 +96,13 @@ fun TimerScreen(
                         onSelect = {
                             tasksViewModel.onEvent(
                                 TasksEvent.OnTaskSelect(task)
+                            )
+                        },
+                        onDropDownItemClick = { item ->
+                            tasksViewModel.onEvent(
+                                TasksEvent.OnDropDownSelect(
+                                    task, item
+                                )
                             )
                         }
                     )

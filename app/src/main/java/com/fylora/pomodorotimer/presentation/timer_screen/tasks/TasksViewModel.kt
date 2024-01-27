@@ -9,6 +9,7 @@ import com.fylora.pomodorotimer.domain.model.InvalidTaskException
 import com.fylora.pomodorotimer.domain.model.Task
 import com.fylora.pomodorotimer.domain.repository.TaskRepository
 import com.fylora.pomodorotimer.domain.use_case.CalculateSessions
+import com.fylora.pomodorotimer.presentation.util.DropDownItem
 import com.fylora.pomodorotimer.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -42,11 +43,6 @@ class TasksViewModel @Inject constructor(
 
     fun onEvent(event: TasksEvent) {
         when(event) {
-            is TasksEvent.DeleteTask -> {
-                viewModelScope.launch {
-                    repository.deleteTask(event.task)
-                }
-            }
             is TasksEvent.UpsertTask -> {
                 viewModelScope.launch {
                     try {
@@ -95,7 +91,7 @@ class TasksViewModel @Inject constructor(
             }
             TasksEvent.OpenCloseAddTaskDialog -> {
                 _state.value = state.value.copy(
-
+                    isAddTaskDialogOpen = !state.value.isAddTaskDialogOpen
                 )
             }
             TasksEvent.OpenCloseDatePicker -> {
@@ -132,6 +128,16 @@ class TasksViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     selectedTask = event.task
                 )
+            }
+            is TasksEvent.OnDropDownSelect -> {
+                when(event.item) {
+                    DropDownItem.Delete -> {
+                        viewModelScope.launch {
+                            repository.deleteTask(event.task)
+                        }
+                    }
+                    DropDownItem.Expand -> TODO()
+                }
             }
         }
     }
