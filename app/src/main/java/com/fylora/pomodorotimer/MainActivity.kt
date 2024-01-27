@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.fylora.pomodorotimer.presentation.timer_screen.TimerEvent
-import com.fylora.pomodorotimer.presentation.timer_screen.TimerScreenViewModel
-import com.fylora.pomodorotimer.presentation.timer_screen.components.header.Header
+import com.fylora.pomodorotimer.presentation.timer_screen.timer.TimerEvent
+import com.fylora.pomodorotimer.presentation.timer_screen.timer.TimerScreenViewModel
+import com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header.Header
 import com.fylora.pomodorotimer.ui.theme.PomodoroTimerTheme
 import dagger.hilt.android.AndroidEntryPoint
 

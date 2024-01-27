@@ -9,8 +9,8 @@ data class TaskEntity(
     val title: String,
     val workTime: Long,
     val dueDate: Long,
-    val totalSessions: Int,
-    val currentSessions: Int,
+    val totalSessions: Double,
+    val currentSessions: Double,
 
     @PrimaryKey
     val id: Int? = null

@@ -6,6 +6,7 @@ import com.fylora.pomodorotimer.core.Consts
 import com.fylora.pomodorotimer.data.local.TaskDatabase
 import com.fylora.pomodorotimer.data.repository.TaskRepositoryImpl
 import com.fylora.pomodorotimer.domain.repository.TaskRepository
+import com.fylora.pomodorotimer.domain.use_case.CalculateSessions
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,5 +31,11 @@ object AppModule {
     @Singleton
     fun provideTaskRepository(database: TaskDatabase): TaskRepository {
         return TaskRepositoryImpl(database.dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCalculateSessionsUseCase(): CalculateSessions {
+        return CalculateSessions()
     }
 }

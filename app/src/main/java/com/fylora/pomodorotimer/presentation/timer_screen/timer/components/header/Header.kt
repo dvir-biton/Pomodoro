@@ -1,4 +1,4 @@
-package com.fylora.pomodorotimer.presentation.timer_screen.components.header
+package com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.fylora.pomodorotimer.core.Globals
 import com.fylora.pomodorotimer.domain.util.TimerState
-import com.fylora.pomodorotimer.presentation.timer_screen.components.header.timer_state_section.TimerSectionBar
+import com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header.timer_state_section.TimerSectionBar
 
 @Composable
 fun Header(

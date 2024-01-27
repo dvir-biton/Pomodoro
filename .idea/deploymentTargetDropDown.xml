@@ -13,15 +13,6 @@
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="8cbf4e3a" />
-                </Key>
-              </deviceKey>
-            </Target>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
                   <value value="C:\Users\dvir\.android\avd\Pixel_6a_API_31.avd" />
                 </Key>

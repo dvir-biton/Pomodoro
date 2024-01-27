@@ -7,8 +7,8 @@ data class Task(
     val title: String,
     val workTime: LocalTime,
     val dueDate: LocalDate,
-    val totalSessions: Int,
-    val currentSessions: Int,
+    val totalSessions: Double,
+    val currentSessions: Double = 0.0,
 
     val id: Int? = null
 )

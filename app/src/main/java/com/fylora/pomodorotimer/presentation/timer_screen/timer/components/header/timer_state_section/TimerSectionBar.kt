@@ -1,4 +1,4 @@
-package com.fylora.pomodorotimer.presentation.timer_screen.components.header.timer_state_section
+package com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header.timer_state_section
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
