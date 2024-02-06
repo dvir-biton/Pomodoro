@@ -16,8 +16,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.fylora.pomodorotimer.presentation.timer_screen.add_task_dialog.AddTaskDialog
 import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TasksEvent
 import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TasksViewModel
 import com.fylora.pomodorotimer.presentation.timer_screen.timer.TimerEvent
@@ -26,17 +29,20 @@ import com.fylora.pomodorotimer.presentation.timer_screen.tasks.TaskItem
 import com.fylora.pomodorotimer.presentation.timer_screen.timer.components.header.Header
 import com.fylora.pomodorotimer.presentation.util.UiEvent
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TimerScreen(
     timerViewModel: TimerScreenViewModel = hiltViewModel(),
     tasksViewModel: TasksViewModel = hiltViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = true) {
         tasksViewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.ShowSnackBar -> {
+                    keyboardController?.hide()
                     snackbarHostState.showSnackbar(
                         event.message
                     )
@@ -44,6 +50,8 @@ fun TimerScreen(
             }
         }
     }
+
+    AddTaskDialog()
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -85,7 +93,10 @@ fun TimerScreen(
             )
 
             LazyColumn {
-                items(tasksViewModel.tasks.value) { task ->
+                items(
+                    items = tasksViewModel.tasks.value,
+                    key = { task -> task.hashCode() }
+                ) { task ->
                     TaskItem(
                         task = task,
                         onCheckChange = {

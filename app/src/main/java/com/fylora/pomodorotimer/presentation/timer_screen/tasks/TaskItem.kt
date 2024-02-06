@@ -2,7 +2,6 @@ package com.fylora.pomodorotimer.presentation.timer_screen.tasks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,14 +83,14 @@ fun TaskItem(
                 else Color.Transparent,
                 shape = RoundedCornerShape(size = 8.dp)
             )
-            .clickable { onSelect() }
             .onSizeChanged { itemHeight = with(density) { it.height.toDp() } }
             .pointerInput(true) {
                 detectTapGestures(
                     onLongPress = {
                         isContextMenuVisible = true
                         pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
-                    }
+                    },
+                    onTap = { onSelect() }
                 )
             },
         contentAlignment = Alignment.Center

@@ -8,7 +8,6 @@ import com.fylora.pomodorotimer.domain.model.Task
 import com.fylora.pomodorotimer.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.time.LocalDate
 
 class TaskRepositoryImpl(
     private val dao: TaskDao
@@ -26,8 +25,6 @@ class TaskRepositoryImpl(
     override suspend fun upsertTask(task: Task) {
         if(task.title.isBlank())
             throw InvalidTaskException("The title cannot be blank")
-        if(task.dueDate.isBefore(LocalDate.now()))
-            throw InvalidTaskException("The due date cannot be in the past")
         if(task.workTime.toSecondOfDay() == 0)
             throw InvalidTaskException("The work time cannot be 0")
 

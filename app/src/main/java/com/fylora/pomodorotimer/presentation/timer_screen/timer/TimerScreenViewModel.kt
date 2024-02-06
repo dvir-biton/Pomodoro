@@ -2,9 +2,12 @@ package com.fylora.pomodorotimer.presentation.timer_screen.timer
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fylora.pomodorotimer.core.Globals
 import com.fylora.pomodorotimer.domain.util.TimerState
+import com.fylora.pomodorotimer.presentation.timer_screen.event.EventManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -66,6 +69,9 @@ class TimerScreenViewModel @Inject constructor(): ViewModel() {
                     TimerState.LongBreak
                 else TimerState.ShortBreak
             )
+            viewModelScope.launch {
+                EventManager.onEndPomodoroSession()
+            }
         } else {
             _state.value = state.value.copy(
                 timerState = TimerState.Pomodoro,

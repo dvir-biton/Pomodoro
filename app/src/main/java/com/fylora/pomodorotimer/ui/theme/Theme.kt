@@ -20,7 +20,8 @@ private val DarkColorScheme = darkColorScheme(
     surface = LightModePrimary,
     onBackground = DarkModePrimary,
     background = LightModePrimary,
-    secondary = DarkModeTask
+    secondary = DarkModeTask,
+    error = TextFieldErrorDark
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -28,7 +29,8 @@ private val LightColorScheme = lightColorScheme(
     surface = DarkModePrimary,
     onBackground = LightModePrimary,
     background = DarkModePrimary,
-    secondary = LightModeTask
+    secondary = LightModeTask,
+    error = TextFieldErrorLight
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
