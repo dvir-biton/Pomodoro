@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.room.Room
 import com.fylora.pomodorotimer.core.Consts
 import com.fylora.pomodorotimer.data.local.TaskDatabase
+import com.fylora.pomodorotimer.data.notifications.NotificationServiceImpl
 import com.fylora.pomodorotimer.data.repository.TaskRepositoryImpl
+import com.fylora.pomodorotimer.domain.notifications.NotificationService
 import com.fylora.pomodorotimer.domain.repository.TaskRepository
 import com.fylora.pomodorotimer.domain.use_case.CalculateSessions
 import dagger.Module
@@ -37,5 +39,11 @@ object AppModule {
     @Singleton
     fun provideCalculateSessionsUseCase(): CalculateSessions {
         return CalculateSessions()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationService(context: Application): NotificationService {
+        return NotificationServiceImpl(context)
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fylora.pomodorotimer.core.Globals
+import com.fylora.pomodorotimer.domain.notifications.NotificationService
 import com.fylora.pomodorotimer.domain.util.TimerState
 import com.fylora.pomodorotimer.presentation.timer_screen.event.EventManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,9 @@ import java.util.TimerTask
 import javax.inject.Inject
 
 @HiltViewModel
-class TimerScreenViewModel @Inject constructor(): ViewModel() {
+class TimerScreenViewModel @Inject constructor(
+    private val notificationService: NotificationService
+): ViewModel() {
 
     private val _state = mutableStateOf(TimerScreenState())
     val state = _state
@@ -72,11 +75,19 @@ class TimerScreenViewModel @Inject constructor(): ViewModel() {
             viewModelScope.launch {
                 EventManager.onEndPomodoroSession()
             }
+            notificationService.showNotification(
+                title = "Pomodoro Ended!",
+                message = "It's time to take a break :)"
+            )
         } else {
             _state.value = state.value.copy(
                 timerState = TimerState.Pomodoro,
                 longBreakIndicator = if(state.value.timerState is TimerState.LongBreak) 0
                 else state.value.longBreakIndicator
+            )
+            notificationService.showNotification(
+                title = "Break Ended!",
+                message = "Back to work :)"
             )
         }
 
